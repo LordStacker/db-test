@@ -1,7 +1,7 @@
 import os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from models import db
+from models import db, User
 from flask_migrate import Migrate
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
@@ -26,6 +26,11 @@ def user():
     user.password = request.json.get("password")
     user.email = request.json.get("email")
     user.isActive = request.json.get("isActive")
+
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify(user.serialize()), 200
 
 if __name__ == "__main__":
     app.run(host='localhost', port=8080)
