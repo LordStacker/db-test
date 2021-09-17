@@ -18,7 +18,7 @@ class User(db.Model):
             'name': self.name,
             'password': self.password,
             'email': self.email,
-            'isAcrive': self.isActive,
+            'isActive': self.isActive,
         }
     def serialize_just_username(self):
         return {

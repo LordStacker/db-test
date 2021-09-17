@@ -19,16 +19,21 @@ migrate = Migrate(app, db)
 def home():
     return jsonify('Hola Mundo')
 
-@app.route("/user", methods=["POST"])
+@app.route("/user", methods=["POST", "GET"])
 def user():
-    user = User()
-    user.name = request.json.get("name")
-    user.password = request.json.get("password")
-    user.email = request.json.get("email")
-    user.isActive = request.json.get("isActive")
+    if request.method == "GET":
+        user = User.query.get(1)
+        if user is not None:
+            return jsonify(user.serialize_just_username())
+    else:
+        user = User()
+        user.name = request.json.get("name")
+        user.password = request.json.get("password")
+        user.email = request.json.get("email")
+        user.isActive = request.json.get("isActive")
 
-    db.session.add(user)
-    db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
     return jsonify(user.serialize()), 200
 
